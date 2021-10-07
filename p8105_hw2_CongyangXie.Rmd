@@ -19,6 +19,8 @@ MrTrashWheel_df <-
   select(-x15, -x16, -x17) %>%
   drop_na() %>%
   mutate(sports_balls = round(sports_balls))
+
+
 ```
 2. Read and clean precipitation data for 2018 and 2019.
   + For each, omit rows without precipitation data and add a variable for year..
@@ -37,6 +39,19 @@ precip19_df <- read_excel("Trash-Wheel-Collection-Totals-8-6-19.xlsx", sheet = "
   + Combine precipitation datasets and convert month to a character variable.
 ```{r}
 precip_df <- full_join(precip18_df, precip19_df) %>%
-  mutate(month = month.name[month])
+  arrange(year, month) %>%
+  mutate(month = month.name[month]) 
+  
 ```
+  Be sure to note the number of observations in both resulting datasets, and give examples of key variables. For available data, what was the total precipitation in 2018? What was the median number of sports balls in a dumpster in 2019?
+```{r}
+stat_MrTrashWheel_df <- skimr::skim(MrTrashWheel_df)
+MrTrashWheel_df %>% select(-year) %>% skimr::skim() %>% select(skim_variable, numeric.mean) %>% top_n(3) %>% arrange(desc(numeric.mean))
+```
+  
+  + The MrTrashWheel dataset has `r ncol(MrTrashWheel_df)` variables and `r nrow(MrTrashWheel_df)` observations. The dataset stores trash collect data from each dumpster in the year of `r unique(pull(MrTrashWheel_df, year))`. The trash type includes `r names(MrTrashWheel_df)[7:13]`. The top3 trash types are stated here
+```{r}
+MrTrashWheel_df %>% select(-year) %>% skimr::skim() %>% select(skim_variable, numeric.mean) %>% top_n(3) %>% arrange(desc(numeric.mean))
+```
+
 

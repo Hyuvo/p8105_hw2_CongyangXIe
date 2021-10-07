@@ -46,7 +46,47 @@ precip19_df <- read_excel("Trash-Wheel-Collection-Totals-8-6-19.xlsx", sheet = "
 
 ``` r
 precip_df <- full_join(precip18_df, precip19_df) %>%
-  mutate(month = month.name[month])
+  arrange(year, month) %>%
+  mutate(month = month.name[month]) 
 ```
 
     ## Joining, by = c("month", "total", "year")
+
+Be sure to note the number of observations in both resulting datasets,
+and give examples of key variables. For available data, what was the
+total precipitation in 2018? What was the median number of sports balls
+in a dumpster in 2019?
+
+``` r
+stat_MrTrashWheel_df <- skimr::skim(MrTrashWheel_df)
+MrTrashWheel_df %>% select(-year) %>% skimr::skim() %>% select(skim_variable, numeric.mean) %>% top_n(3) %>% arrange(desc(numeric.mean))
+```
+
+    ## Selecting by numeric.mean
+
+    ## # A tibble: 3 × 2
+    ##   skim_variable   numeric.mean
+    ##   <chr>                  <dbl>
+    ## 1 cigarette_butts       30754.
+    ## 2 polystyrene            2139.
+    ## 3 plastic_bottles        1873.
+
+-   The MrTrashWheel dataset has 14 variables and 344 observations. The
+    dataset stores trash collect data from each dumpster in the year of
+    2014, 2015, 2016, 2017, 2018, 2019. The trash type includes
+    plastic_bottles, polystyrene, cigarette_butts, glass_bottles,
+    grocery_bags, chip_bags, sports_balls. The top3 trash types are
+    stated here
+
+``` r
+MrTrashWheel_df %>% select(-year) %>% skimr::skim() %>% select(skim_variable, numeric.mean) %>% top_n(3) %>% arrange(desc(numeric.mean))
+```
+
+    ## Selecting by numeric.mean
+
+    ## # A tibble: 3 × 2
+    ##   skim_variable   numeric.mean
+    ##   <chr>                  <dbl>
+    ## 1 cigarette_butts       30754.
+    ## 2 polystyrene            2139.
+    ## 3 plastic_bottles        1873.
