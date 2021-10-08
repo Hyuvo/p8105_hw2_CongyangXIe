@@ -10,11 +10,14 @@ library(tidyverse)
 library(readxl)
 ```
 ## Problem 1
+```{r}
+file_path1 = "Trash-Wheel-Collection-Totals-7-2020-2.xlsx"
+```
 
 1. Read and clean the Mr. Trash Wheel sheet
 ```{r, message = FALSE}
 MrTrashWheel_df <-
-  read_excel("Trash-Wheel-Collection-Totals-7-2020-2.xlsx", sheet = "Mr. Trash Wheel") %>%
+  read_excel(file_path1, sheet = "Mr. Trash Wheel") %>%
   janitor::clean_names() %>%
   select(-x15, -x16, -x17) %>%
   drop_na() %>%
@@ -25,29 +28,44 @@ MrTrashWheel_df <-
 2. Read and clean precipitation data for 2018 and 2019.
   + For each, omit rows without precipitation data and add a variable for year..
 ```{r}
-precip18_df <- read_excel("Trash-Wheel-Collection-Totals-7-2020-2.xlsx", sheet = "2018 Precipitation", skip = 1) %>%
+precip18_df <- 
+  read_excel(file_path1, sheet = "2018 Precipitation", skip = 1) %>%
   janitor::clean_names() %>%
   drop_na() %>%
   mutate(year = 2018) 
   
 
-precip19_df <- read_excel("Trash-Wheel-Collection-Totals-7-2020-2.xlsx", sheet = "2019 Precipitation", skip = 1) %>%
+precip19_df <- 
+  read_excel(file_path1, sheet = "2019 Precipitation", skip = 1) %>%
   janitor::clean_names() %>%
   drop_na() %>%
   mutate(year = 2019)
 ```
   + Combine precipitation datasets and convert month to a character variable.
 ```{r}
-precip_df <- full_join(precip18_df, precip19_df) %>%
+precip_df <- 
+  full_join(precip18_df, precip19_df) %>%
   arrange(year, month) %>%
   mutate(month = month.name[month]) 
   
 ```
   Be sure to note the number of observations in both resulting datasets, and give examples of key variables. For available data, what was the total precipitation in 2018? What was the median number of sports balls in a dumpster in 2019?
   
+3. The summary of MrTrashWheel dataset:  
   + The MrTrashWheel dataset has `r ncol(MrTrashWheel_df)` variables and `r nrow(MrTrashWheel_df)` observations. The dataset stores trash collect data from each dumpster in the year of `r unique(pull(MrTrashWheel_df, year))`. The trash type includes `r names(MrTrashWheel_df)[7:13]`. The top3 trash types are stated here:
 ```{r}
 MrTrashWheel_df %>% select(-year) %>% skimr::skim() %>% select(skim_variable, numeric.mean) %>% top_n(3) %>% arrange(desc(numeric.mean))
+
 ```
+  + The median number of sports balls in a dumpster in 2019 is `r MrTrashWheel_df %>% filter(year == 2019) %>% pull(sports_balls) %>% median()`.
 
+4. The summary of precipitation data:
 
+  + The precipitation dataset has `r ncol(precip_df)` variables and `r nrow(precip_df)` observations. The dataset stores trash precipitation data on a monthly basis collected from 2018 to 2019. The mean monthly precipitation for 2018 is stated below:
+
+```{r}
+precip_df %>% group_by(year) %>% summarise(mean_month_precip = mean(total))
+
+``` 
+
+  + The total precipitation in 2018 is `r precip_df %>% filter(year == 2018) %>% pull(total) %>% sum()`

@@ -12,11 +12,15 @@ library(readxl)
 
 ## Problem 1
 
+``` r
+file_path1 = "Trash-Wheel-Collection-Totals-7-2020-2.xlsx"
+```
+
 1.  Read and clean the Mr. Trash Wheel sheet
 
 ``` r
 MrTrashWheel_df <-
-  read_excel("Trash-Wheel-Collection-Totals-7-2020-2.xlsx", sheet = "Mr. Trash Wheel") %>%
+  read_excel(file_path1, sheet = "Mr. Trash Wheel") %>%
   janitor::clean_names() %>%
   select(-x15, -x16, -x17) %>%
   drop_na() %>%
@@ -29,13 +33,15 @@ MrTrashWheel_df <-
     for year..
 
 ``` r
-precip18_df <- read_excel("Trash-Wheel-Collection-Totals-7-2020-2.xlsx", sheet = "2018 Precipitation", skip = 1) %>%
+precip18_df <- 
+  read_excel(file_path1, sheet = "2018 Precipitation", skip = 1) %>%
   janitor::clean_names() %>%
   drop_na() %>%
   mutate(year = 2018) 
   
 
-precip19_df <- read_excel("Trash-Wheel-Collection-Totals-7-2020-2.xlsx", sheet = "2019 Precipitation", skip = 1) %>%
+precip19_df <- 
+  read_excel(file_path1, sheet = "2019 Precipitation", skip = 1) %>%
   janitor::clean_names() %>%
   drop_na() %>%
   mutate(year = 2019)
@@ -45,7 +51,8 @@ precip19_df <- read_excel("Trash-Wheel-Collection-Totals-7-2020-2.xlsx", sheet =
     variable.
 
 ``` r
-precip_df <- full_join(precip18_df, precip19_df) %>%
+precip_df <- 
+  full_join(precip18_df, precip19_df) %>%
   arrange(year, month) %>%
   mutate(month = month.name[month]) 
 ```
@@ -56,6 +63,8 @@ Be sure to note the number of observations in both resulting datasets,
 and give examples of key variables. For available data, what was the
 total precipitation in 2018? What was the median number of sports balls
 in a dumpster in 2019?
+
+3.  The summary of MrTrashWheel dataset:  
 
 -   The MrTrashWheel dataset has 14 variables and 453 observations. The
     dataset stores trash collect data from each dumpster in the year of
@@ -76,3 +85,24 @@ MrTrashWheel_df %>% select(-year) %>% skimr::skim() %>% select(skim_variable, nu
     ## 1 cigarette_butts       24522.
     ## 2 polystyrene            1921.
     ## 3 plastic_bottles        1899.
+
+-   The median number of sports balls in a dumpster in 2019 is 9.
+
+4.  The summary of precipitation data:
+
+-   The precipitation dataset has 3 variables and 24 observations. The
+    dataset stores trash precipitation data on a monthly basis collected
+    from 2018 to 2019. The mean monthly precipitation for 2018 is stated
+    below:
+
+``` r
+precip_df %>% group_by(year) %>% summarise(mean_month_precip = mean(total))
+```
+
+    ## # A tibble: 2 × 2
+    ##    year mean_month_precip
+    ##   <dbl>             <dbl>
+    ## 1  2018              5.86
+    ## 2  2019              2.83
+
+-   The total precipitation in 2018 is 70.33
