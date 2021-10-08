@@ -49,7 +49,6 @@ precip_df <-
   mutate(month = month.name[month]) 
   
 ```
-  Be sure to note the number of observations in both resulting datasets, and give examples of key variables. For available data, what was the total precipitation in 2018? What was the median number of sports balls in a dumpster in 2019?
   
 3. The summary of MrTrashWheel dataset:  
   + The MrTrashWheel dataset has `r ncol(MrTrashWheel_df)` variables and `r nrow(MrTrashWheel_df)` observations. The dataset stores trash collect data from each dumpster in the year of `r unique(pull(MrTrashWheel_df, year))`. The trash type includes `r names(MrTrashWheel_df)[7:13]`. The top3 trash types are stated here:
@@ -69,3 +68,25 @@ precip_df %>% group_by(year) %>% summarise(mean_month_precip = mean(total))
 ``` 
 
   + The total precipitation in 2018 is `r precip_df %>% filter(year == 2018) %>% pull(total) %>% sum()`
+  
+
+## Problem 2 Merge FiveThirtyEight datasets into 1 dataframe.
+
+1. clean the data in pols-month.csv.
+
+```{r}
+# Use separate() to break up the variable mon into integer variables year, month, and day; replace month number with month name; create a president variable taking values gop and dem, and remove prez_dem and prez_gop; and remove the day variable.
+
+
+pols_month_df <-
+  read_csv("fivethirtyeight_datasets/pols-month.csv") %>%
+  janitor::clean_names() %>%
+  # Use separate() to break up the variable mon into integer variables year, month, and day
+  separate(mon, c("year", "month", "day"), sep = "-") %>%
+  mutate(year = as.integer(year),
+         # replace month number with month name
+         month = month.name[as.integer(month)],
+         day = as.integer(day))
+```
+
+

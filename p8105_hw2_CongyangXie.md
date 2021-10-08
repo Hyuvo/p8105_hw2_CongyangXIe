@@ -59,11 +59,6 @@ precip_df <-
 
     ## Joining, by = c("month", "total", "year")
 
-Be sure to note the number of observations in both resulting datasets,
-and give examples of key variables. For available data, what was the
-total precipitation in 2018? What was the median number of sports balls
-in a dumpster in 2019?
-
 3.  The summary of MrTrashWheel dataset:  
 
 -   The MrTrashWheel dataset has 14 variables and 453 observations. The
@@ -106,3 +101,33 @@ precip_df %>% group_by(year) %>% summarise(mean_month_precip = mean(total))
     ## 2  2019              2.83
 
 -   The total precipitation in 2018 is 70.33
+
+## Problem 2 Merge FiveThirtyEight datasets into 1 dataframe.
+
+1.  clean the data in pols-month.csv.
+
+``` r
+# Use separate() to break up the variable mon into integer variables year, month, and day; replace month number with month name; create a president variable taking values gop and dem, and remove prez_dem and prez_gop; and remove the day variable.
+
+
+pols_month_df <-
+  read_csv("fivethirtyeight_datasets/pols-month.csv") %>%
+  janitor::clean_names() %>%
+  # Use separate() to break up the variable mon into integer variables year, month, and day
+  separate(mon, c("year", "month", "day"), sep = "-") %>%
+  mutate(year = as.integer(year),
+         # replace month number with month name
+         month = month.name[as.integer(month)],
+         day = as.integer(day))
+```
+
+    ## Rows: 822 Columns: 9
+
+    ## ── Column specification ────────────────────────────────────────────────────────
+    ## Delimiter: ","
+    ## dbl  (8): prez_gop, gov_gop, sen_gop, rep_gop, prez_dem, gov_dem, sen_dem, r...
+    ## date (1): mon
+
+    ## 
+    ## ℹ Use `spec()` to retrieve the full column specification for this data.
+    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
