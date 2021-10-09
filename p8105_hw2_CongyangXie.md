@@ -102,8 +102,6 @@ mean monthly precipitation for 2018
 1.  clean the data in pols-month.csv.
 
 ``` r
-# Use separate() to break up the variable mon into integer variables year, month, and day; replace month number with month name; create a president variable taking values gop and dem, and remove prez_dem and prez_gop; and remove the day variable.
-
 pols_df <-
   read_csv("fivethirtyeight_datasets/pols-month.csv") %>%
   janitor::clean_names() %>%
@@ -112,14 +110,9 @@ pols_df <-
   mutate(year = as.integer(year),
          # replace month number with month name
          month = month.name[as.integer(month)],
-         day = as.integer(day)) %>%
-  pivot_longer(
-    cols = starts_with("prez"),
-    names_to = "president",
-    values_to = "value",
-    names_prefix = "prez_"
-  ) %>%
-  select(-value, -day)
+         day = as.integer(day),
+         president = ifelse(prez_dem == 1, "dem", "gop")) %>%
+  select(-starts_with("prez"), -day)
 ```
 
 2.  clean the data in snp.csv
@@ -150,7 +143,6 @@ unemployment_df <-
                values_to = "unemployment rate") %>%
   janitor::clean_names() %>%
   # convert month from abbreviation to full
-  
   mutate(month = month.name[match(month, month.abb)])
 ```
 
@@ -168,7 +160,7 @@ final_df <-
     (e.g. give the dimension, range of years, and names of key
     variables).
 
--   The pols dataset has 9 variables and 1644 observations, containing
+-   The pols dataset has 9 variables and 822 observations, containing
     the number of national politicians who are democratic or republican
     at time ranging from 1947 to 2015. The variables in the dataset are:
     year, month, gov_gop, sen_gop, rep_gop, gov_dem, sen_dem, rep_dem,
