@@ -193,3 +193,77 @@ final_df <-
     politicians who are democratic or republican, S&P, and unemployment
     rate at time ranging from 1948 to 2015.The variables in the dataset
     are: year, month, unemployment_rate.
+
+## Problem 3
+
+``` r
+popular_baby_names_df <- read_csv("Popular_Baby_Names.csv") %>%
+  janitor::clean_names() %>%
+  mutate(
+    ethnicity = recode(
+      ethnicity,
+      "BLACK NON HISP" = "BLACK NON HISPANIC",
+      "WHITE NON HISP" = "WHITE NON HISPANIC",
+      "ASIAN AND PACI" = "ASIAN AND PACIFIC ISLANDER"
+    )
+  ) %>%
+  distinct()
+```
+
+``` r
+# the rank in popularity of the name “Olivia” as a female baby name over time
+popular_baby_names_df %>%
+  filter(childs_first_name == "Olivia") %>%
+  filter(gender =="FEMALE") %>%
+  relocate(year_of_birth, rank) %>%
+  group_by(year_of_birth) %>%
+  arrange(year_of_birth, rank) %>%
+  select(-childs_first_name)
+```
+
+    ## # A tibble: 16 × 5
+    ## # Groups:   year_of_birth [4]
+    ##    year_of_birth  rank gender ethnicity                  count
+    ##            <dbl> <dbl> <chr>  <chr>                      <dbl>
+    ##  1          2013     1 FEMALE WHITE NON HISPANIC           233
+    ##  2          2013     3 FEMALE ASIAN AND PACIFIC ISLANDER   109
+    ##  3          2013     6 FEMALE BLACK NON HISPANIC            64
+    ##  4          2013    22 FEMALE HISPANIC                      87
+    ##  5          2014     1 FEMALE ASIAN AND PACIFIC ISLANDER   141
+    ##  6          2014     1 FEMALE WHITE NON HISPANIC           248
+    ##  7          2014     8 FEMALE BLACK NON HISPANIC            52
+    ##  8          2014    16 FEMALE HISPANIC                      96
+    ##  9          2015     1 FEMALE ASIAN AND PACIFIC ISLANDER   188
+    ## 10          2015     1 FEMALE WHITE NON HISPANIC           225
+    ## 11          2015     4 FEMALE BLACK NON HISPANIC            82
+    ## 12          2015    16 FEMALE HISPANIC                      94
+    ## 13          2016     1 FEMALE ASIAN AND PACIFIC ISLANDER   172
+    ## 14          2016     1 FEMALE WHITE NON HISPANIC           230
+    ## 15          2016     8 FEMALE BLACK NON HISPANIC            49
+    ## 16          2016    13 FEMALE HISPANIC                     108
+
+``` r
+# the most popular name among male children over time
+popular_baby_names_df %>%
+  filter(gender =="MALE") %>%
+  relocate(year_of_birth, rank, childs_first_name) %>%
+  group_by(year_of_birth) %>%
+  arrange(rank, year_of_birth) %>%
+  filter(rank == 1)
+```
+
+    ## # A tibble: 24 × 6
+    ## # Groups:   year_of_birth [6]
+    ##    year_of_birth  rank childs_first_name gender ethnicity                  count
+    ##            <dbl> <dbl> <chr>             <chr>  <chr>                      <dbl>
+    ##  1          2011     1 ETHAN             MALE   ASIAN AND PACIFIC ISLANDER   177
+    ##  2          2011     1 JAYDEN            MALE   BLACK NON HISPANIC           184
+    ##  3          2011     1 JAYDEN            MALE   HISPANIC                     426
+    ##  4          2011     1 MICHAEL           MALE   WHITE NON HISPANIC           292
+    ##  5          2012     1 RYAN              MALE   ASIAN AND PACIFIC ISLANDER   197
+    ##  6          2012     1 JAYDEN            MALE   BLACK NON HISPANIC           171
+    ##  7          2012     1 JAYDEN            MALE   HISPANIC                     364
+    ##  8          2012     1 JOSEPH            MALE   WHITE NON HISPANIC           300
+    ##  9          2013     1 Jayden            MALE   ASIAN AND PACIFIC ISLANDER   220
+    ## 10          2013     1 Ethan             MALE   BLACK NON HISPANIC           146
+    ## # … with 14 more rows

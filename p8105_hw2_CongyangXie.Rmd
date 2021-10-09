@@ -142,3 +142,45 @@ final_df <-
   + The unemployment dataset has `r ncol(unemployment_df)` variables and `r nrow(unemployment_df)` observations, containing unemployment rate at time ranging from `r min(pull(unemployment_df, year))` to `r max(pull(unemployment_df, year))`. The variables in the dataset are:  `r names(unemployment_df)`.
   
   + The final dataset is merged by the 3 datasets above, which has `r ncol(unemployment_df)` variables and `r nrow(unemployment_df)` observations, containing the number of national politicians who are democratic or republican, S&P, and unemployment rate at time ranging from `r min(pull(unemployment_df, year))` to `r max(pull(unemployment_df, year))`.The variables in the dataset are:  `r names(unemployment_df)`.
+
+
+## Problem 3
+
+```{r, message=FALSE}
+popular_baby_names_df <- read_csv("Popular_Baby_Names.csv") %>%
+  janitor::clean_names() %>%
+  mutate(
+    ethnicity = recode(
+      ethnicity,
+      "BLACK NON HISP" = "BLACK NON HISPANIC",
+      "WHITE NON HISP" = "WHITE NON HISPANIC",
+      "ASIAN AND PACI" = "ASIAN AND PACIFIC ISLANDER"
+    )
+  ) %>%
+  distinct()
+```
+
+
+```{r}
+# the rank in popularity of the name “Olivia” as a female baby name over time
+popular_baby_names_df %>%
+  filter(childs_first_name == "Olivia") %>%
+  filter(gender =="FEMALE") %>%
+  relocate(year_of_birth, rank) %>%
+  group_by(year_of_birth) %>%
+  arrange(year_of_birth, rank) %>%
+  select(-childs_first_name)
+  
+```
+
+```{r}
+# the most popular name among male children over time
+popular_baby_names_df %>%
+  filter(gender =="MALE") %>%
+  relocate(year_of_birth, rank, childs_first_name) %>%
+  group_by(year_of_birth) %>%
+  arrange(rank, year_of_birth) %>%
+  filter(rank == 1)
+
+```
+
