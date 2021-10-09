@@ -110,7 +110,6 @@ precip_df %>% group_by(year) %>% summarise(mean_month_precip = mean(total))
 ``` r
 # Use separate() to break up the variable mon into integer variables year, month, and day; replace month number with month name; create a president variable taking values gop and dem, and remove prez_dem and prez_gop; and remove the day variable.
 
-
 pols_df <-
   read_csv("fivethirtyeight_datasets/pols-month.csv") %>%
   janitor::clean_names() %>%
@@ -120,7 +119,12 @@ pols_df <-
          # replace month number with month name
          month = month.name[as.integer(month)],
          day = as.integer(day)) %>%
-  pivot_longer(cols = starts_with("prez"), names_to = "president") %>%
+  pivot_longer(
+    cols = starts_with("prez"),
+    names_to = "president",
+    values_to = "value",
+    names_prefix = "prez_"
+  ) %>%
   select(-value, -day)
 ```
 
@@ -151,19 +155,16 @@ unemployment_df <-
                names_to = "month",
                values_to = "unemployment rate") %>%
   janitor::clean_names() %>%
-  # convert month from abbreviation to full.
+  # convert month from abbreviation to full
+  
   mutate(month = month.name[match(month, month.abb)])
 ```
 
-    ## Rows: 68 Columns: 13
-
-    ## ── Column specification ────────────────────────────────────────────────────────
-    ## Delimiter: ","
-    ## dbl (13): Year, Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec
-
-    ## 
-    ## ℹ Use `spec()` to retrieve the full column specification for this data.
-    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-
 4.  Join the datasets by merging snp into pols, and merging unemployment
     into the result
+
+``` r
+final_df <- 
+  left_join(pols_df, snp_df, by = c("year", "month")) %>%
+  left_join(unemployment_df, by = c("year", "month"))
+```
