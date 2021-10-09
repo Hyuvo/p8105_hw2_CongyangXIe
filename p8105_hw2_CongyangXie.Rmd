@@ -137,14 +137,15 @@ final_df <-
 
   + The unemployment dataset has `r ncol(unemployment_df)` variables and `r nrow(unemployment_df)` observations, containing unemployment rate at time ranging from `r min(pull(unemployment_df, year))` to `r max(pull(unemployment_df, year))`. The variables in the dataset are:  `r names(unemployment_df)`.
   
-  + The final dataset is merged by the 3 datasets above, which has `r ncol(final_df)` variables and `r nrow(final_df)` observations, containing the number of national politicians who are democratic or republican, S&P, and unemployment rate at time ranging from `r min(pull(final_df, year))` to `r max(pull(final_df, year))`.The variables in the dataset are:  `r names(final_df)`.
+  + The final dataset is merged by the 3 datasets above, which has `r ncol(final_df)` variables and `r nrow(final_df)` observations, containing the number of national politicians who are democratic or republican, S&P, and unemployment rate at time ranging from `r min(pull(final_df, year))` to `r max(pull(final_df, year))`. The variables in the dataset are:  `r names(final_df)`.
 
 
 ## Problem 3
 
 1. Load and tidy dataset popular baby names.
 ```{r, message=FALSE}
-popular_baby_names_df <- read_csv("Popular_Baby_Names.csv") %>%
+popular_baby_names_df <- 
+  read_csv("Popular_Baby_Names.csv") %>%
   janitor::clean_names() %>%
   mutate(
     ethnicity = recode(
@@ -200,7 +201,5 @@ ggplot(plt_df, aes(x = rank, y = count)) +
   ) +
   theme_classic() + 
   theme(legend.position = "bottom")
-
-  # geom_text(aes(label=childs_first_name), size=3)
 ```
 

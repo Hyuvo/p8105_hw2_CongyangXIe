@@ -178,7 +178,7 @@ final_df <-
 -   The final dataset is merged by the 3 datasets above, which has 11
     variables and 822 observations, containing the number of national
     politicians who are democratic or republican, S&P, and unemployment
-    rate at time ranging from 1947 to 2015.The variables in the dataset
+    rate at time ranging from 1947 to 2015. The variables in the dataset
     are: year, month, gov_gop, sen_gop, rep_gop, gov_dem, sen_dem,
     rep_dem, president, close, unemployment_rate.
 
@@ -187,7 +187,8 @@ final_df <-
 1.  Load and tidy dataset popular baby names.
 
 ``` r
-popular_baby_names_df <- read_csv("Popular_Baby_Names.csv") %>%
+popular_baby_names_df <- 
+  read_csv("Popular_Baby_Names.csv") %>%
   janitor::clean_names() %>%
   mutate(
     ethnicity = recode(
@@ -269,7 +270,3 @@ ggplot(plt_df, aes(x = rank, y = count)) +
 ```
 
 ![](p8105_hw2_CongyangXie_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
-
-``` r
-  # geom_text(aes(label=childs_first_name), size=3)
-```
