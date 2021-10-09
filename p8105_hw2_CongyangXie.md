@@ -8,6 +8,7 @@ Congyang Xie
 ``` r
 library(tidyverse)
 library(readxl)
+library(lubridate)
 ```
 
 ## Problem 1
@@ -110,7 +111,7 @@ precip_df %>% group_by(year) %>% summarise(mean_month_precip = mean(total))
 # Use separate() to break up the variable mon into integer variables year, month, and day; replace month number with month name; create a president variable taking values gop and dem, and remove prez_dem and prez_gop; and remove the day variable.
 
 
-pols_month_df <-
+pols_df <-
   read_csv("fivethirtyeight_datasets/pols-month.csv") %>%
   janitor::clean_names() %>%
   # Use separate() to break up the variable mon into integer variables year, month, and day
@@ -118,16 +119,51 @@ pols_month_df <-
   mutate(year = as.integer(year),
          # replace month number with month name
          month = month.name[as.integer(month)],
-         day = as.integer(day))
+         day = as.integer(day)) %>%
+  pivot_longer(cols = starts_with("prez"), names_to = "president") %>%
+  select(-value, -day)
 ```
 
-    ## Rows: 822 Columns: 9
+2.  clean the data in snp.csv
+
+``` r
+snp_df <-
+  read_csv("fivethirtyeight_datasets/snp.csv") %>%
+  janitor::clean_names() %>%
+  mutate(date = mdy(date)) %>%
+  # Use separate() to break up the variable date into integer variables year, month, and day
+  separate(date, c("year", "month", "day"), sep = "-") %>%
+  mutate(# replace month number with month name
+    month = month.name[as.integer(month)],
+    day = as.integer(day),
+    year = as.integer(year)) %>%
+  arrange(year, month) %>%
+  relocate(year, month)
+```
+
+3.  tidy the unemployment data so that it can be merged with the
+    previous datasets
+
+``` r
+unemployment_df <-
+  read_csv("fivethirtyeight_datasets/unemployment.csv") %>%
+  pivot_longer(cols = 2:13,
+               names_to = "month",
+               values_to = "unemployment rate") %>%
+  janitor::clean_names() %>%
+  # convert month from abbreviation to full.
+  mutate(month = month.name[match(month, month.abb)])
+```
+
+    ## Rows: 68 Columns: 13
 
     ## ── Column specification ────────────────────────────────────────────────────────
     ## Delimiter: ","
-    ## dbl  (8): prez_gop, gov_gop, sen_gop, rep_gop, prez_dem, gov_dem, sen_dem, r...
-    ## date (1): mon
+    ## dbl (13): Year, Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec
 
     ## 
     ## ℹ Use `spec()` to retrieve the full column specification for this data.
     ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+
+4.  Join the datasets by merging snp into pols, and merging unemployment
+    into the result
