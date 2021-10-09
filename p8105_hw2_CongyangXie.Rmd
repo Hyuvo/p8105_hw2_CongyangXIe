@@ -47,8 +47,15 @@ precip19_df <-
 precip_df <- 
   full_join(precip18_df, precip19_df) %>%
   arrange(year, month) %>%
+  relocate(year, month) %>%
   mutate(month = month.name[month]) 
   
+```
+```{r}
+bind_rows(precip18_df, precip19_df) %>% 
+  janitor::clean_names() %>% 
+  mutate(month = month.name[month]) %>% 
+  relocate(year, month, total)
 ```
   
 3. The summary of MrTrashWheel dataset:  

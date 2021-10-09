@@ -55,10 +55,33 @@ precip19_df <-
 precip_df <- 
   full_join(precip18_df, precip19_df) %>%
   arrange(year, month) %>%
+  relocate(year, month) %>%
   mutate(month = month.name[month]) 
 ```
 
     ## Joining, by = c("month", "total", "year")
+
+``` r
+bind_rows(precip18_df, precip19_df) %>% 
+  janitor::clean_names() %>% 
+  mutate(month = month.name[month]) %>% 
+  relocate(year, month, total)
+```
+
+    ## # A tibble: 24 × 3
+    ##     year month     total
+    ##    <dbl> <chr>     <dbl>
+    ##  1  2018 January    0.94
+    ##  2  2018 February   4.8 
+    ##  3  2018 March      2.69
+    ##  4  2018 April      4.69
+    ##  5  2018 May        9.27
+    ##  6  2018 June       4.77
+    ##  7  2018 July      10.2 
+    ##  8  2018 August     6.45
+    ##  9  2018 September 10.5 
+    ## 10  2018 October    2.12
+    ## # … with 14 more rows
 
 3.  The summary of MrTrashWheel dataset:  
 
@@ -279,7 +302,7 @@ ggplot(plt_df, aes(x = rank, y = count)) +
   theme(legend.position = "bottom")
 ```
 
-![](p8105_hw2_CongyangXie_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
+![](p8105_hw2_CongyangXie_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
 
 ``` r
   # geom_text(aes(label=childs_first_name), size=3)
