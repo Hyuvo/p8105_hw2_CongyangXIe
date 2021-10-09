@@ -33,14 +33,16 @@ precip18_df <-
   read_excel(file_path1, sheet = "2018 Precipitation", skip = 1) %>%
   janitor::clean_names() %>%
   drop_na() %>%
-  mutate(year = 2018) 
+  mutate(year = 2018) %>%
+  relocate(year)
   
 
 precip19_df <- 
   read_excel(file_path1, sheet = "2019 Precipitation", skip = 1) %>%
   janitor::clean_names() %>%
   drop_na() %>%
-  mutate(year = 2019)
+  mutate(year = 2019) %>%
+  relocate(year)
 ```
   + Combine precipitation datasets and convert month to a character variable.
 ```{r}
@@ -51,17 +53,11 @@ precip_df <-
   mutate(month = month.name[month]) 
   
 ```
-```{r}
-bind_rows(precip18_df, precip19_df) %>% 
-  janitor::clean_names() %>% 
-  mutate(month = month.name[month]) %>% 
-  relocate(year, month, total)
-```
   
 3. The summary of MrTrashWheel dataset:  
   + The MrTrashWheel dataset has `r ncol(MrTrashWheel_df)` variables and `r nrow(MrTrashWheel_df)` observations. The dataset stores trash collect data from each dumpster in the year of `r unique(pull(MrTrashWheel_df, year))`. The trash type includes `r names(MrTrashWheel_df)[7:13]`. The top3 trash types are stated here:
-```{r}
-MrTrashWheel_df %>% select(-year) %>% skimr::skim() %>% select(skim_variable, numeric.mean) %>% top_n(3) %>% arrange(desc(numeric.mean)) %>% knitr::kable(caption = "The top3 trash types")
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+MrTrashWheel_df %>% select(-year) %>% skimr::skim() %>% select(skim_variable, numeric.mean) %>% top_n(3) %>% arrange(desc(numeric.mean)) %>% knitr::kable(caption = "The top3 trash types", align = 'c')
 
 ```
   + The median number of sports balls in a dumpster in 2019 is `r MrTrashWheel_df %>% filter(year == 2019) %>% pull(sports_balls) %>% median()`.
@@ -70,8 +66,8 @@ MrTrashWheel_df %>% select(-year) %>% skimr::skim() %>% select(skim_variable, nu
 
   + The precipitation dataset has `r ncol(precip_df)` variables and `r nrow(precip_df)` observations. The dataset stores trash precipitation data on a monthly basis collected from 2018 to 2019. The mean monthly precipitation for 2018 is stated below:
 
-```{r}
-precip_df %>% group_by(year) %>% summarise(mean_month_precip = mean(total)) %>% filter(year == 2018) %>% knitr::kable()
+```{r echo=FALSE, message=FALSE}
+precip_df %>% group_by(year) %>% summarise(mean_month_precip = mean(total)) %>% filter(year == 2018) %>% knitr::kable(caption = "mean monthly precipitation for 2018", align = "c")
 
 ``` 
 
@@ -177,7 +173,7 @@ popular_baby_names_df %>%
   arrange(year_of_birth) %>%
   select(-childs_first_name, -count) %>%
   pivot_wider(names_from = year_of_birth, values_from = rank) %>%
-  knitr::kable(caption = "the rank in popularity of the name “Olivia” as a female baby name over time")
+  knitr::kable(caption = "the rank in popularity of the name “Olivia” as a female baby name over time", align = "c")
   
 ```
 3. create table showing the most popular name among male children over time.
@@ -189,7 +185,7 @@ popular_baby_names_df %>%
   select(-count) %>%
   arrange(year_of_birth) %>%
   pivot_wider(names_from = year_of_birth, values_from = childs_first_name) %>%
-  knitr::kable(caption = "the most popular name among male children over time")
+  knitr::kable(caption = "the most popular name among male children over time", align = "c")
 
 ```
 

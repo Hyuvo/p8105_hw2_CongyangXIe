@@ -38,14 +38,16 @@ precip18_df <-
   read_excel(file_path1, sheet = "2018 Precipitation", skip = 1) %>%
   janitor::clean_names() %>%
   drop_na() %>%
-  mutate(year = 2018) 
+  mutate(year = 2018) %>%
+  relocate(year)
   
 
 precip19_df <- 
   read_excel(file_path1, sheet = "2019 Precipitation", skip = 1) %>%
   janitor::clean_names() %>%
   drop_na() %>%
-  mutate(year = 2019)
+  mutate(year = 2019) %>%
+  relocate(year)
 ```
 
 -   Combine precipitation datasets and convert month to a character
@@ -59,29 +61,7 @@ precip_df <-
   mutate(month = month.name[month]) 
 ```
 
-    ## Joining, by = c("month", "total", "year")
-
-``` r
-bind_rows(precip18_df, precip19_df) %>% 
-  janitor::clean_names() %>% 
-  mutate(month = month.name[month]) %>% 
-  relocate(year, month, total)
-```
-
-    ## # A tibble: 24 × 3
-    ##     year month     total
-    ##    <dbl> <chr>     <dbl>
-    ##  1  2018 January    0.94
-    ##  2  2018 February   4.8 
-    ##  3  2018 March      2.69
-    ##  4  2018 April      4.69
-    ##  5  2018 May        9.27
-    ##  6  2018 June       4.77
-    ##  7  2018 July      10.2 
-    ##  8  2018 August     6.45
-    ##  9  2018 September 10.5 
-    ## 10  2018 October    2.12
-    ## # … with 14 more rows
+    ## Joining, by = c("year", "month", "total")
 
 3.  The summary of MrTrashWheel dataset:  
 
@@ -92,17 +72,11 @@ bind_rows(precip18_df, precip19_df) %>%
     glass_bottles, grocery_bags, chip_bags, sports_balls. The top3 trash
     types are stated here:
 
-``` r
-MrTrashWheel_df %>% select(-year) %>% skimr::skim() %>% select(skim_variable, numeric.mean) %>% top_n(3) %>% arrange(desc(numeric.mean)) %>% knitr::kable(caption = "The top3 trash types")
-```
-
-    ## Selecting by numeric.mean
-
-| skim_variable   | numeric.mean |
-|:----------------|-------------:|
-| cigarette_butts |    24521.678 |
-| polystyrene     |     1920.921 |
-| plastic_bottles |     1898.929 |
+|  skim_variable  | numeric.mean |
+|:---------------:|:------------:|
+| cigarette_butts |  24521.678   |
+|   polystyrene   |   1920.921   |
+| plastic_bottles |   1898.929   |
 
 The top3 trash types
 
@@ -115,13 +89,11 @@ The top3 trash types
     from 2018 to 2019. The mean monthly precipitation for 2018 is stated
     below:
 
-``` r
-precip_df %>% group_by(year) %>% summarise(mean_month_precip = mean(total)) %>% filter(year == 2018) %>% knitr::kable()
-```
-
 | year | mean_month_precip |
-|-----:|------------------:|
-| 2018 |          5.860833 |
+|:----:|:-----------------:|
+| 2018 |     5.860833      |
+
+mean monthly precipitation for 2018
 
 -   The total precipitation in 2018 is 70.33
 
@@ -245,15 +217,15 @@ popular_baby_names_df %>%
   arrange(year_of_birth) %>%
   select(-childs_first_name, -count) %>%
   pivot_wider(names_from = year_of_birth, values_from = rank) %>%
-  knitr::kable(caption = "the rank in popularity of the name “Olivia” as a female baby name over time")
+  knitr::kable(caption = "the rank in popularity of the name “Olivia” as a female baby name over time", align = "c")
 ```
 
-| gender | ethnicity                  | 2011 | 2012 | 2013 | 2014 | 2015 | 2016 |
-|:-------|:---------------------------|-----:|-----:|-----:|-----:|-----:|-----:|
-| FEMALE | ASIAN AND PACIFIC ISLANDER |    4 |    3 |    3 |    1 |    1 |    1 |
-| FEMALE | BLACK NON HISPANIC         |   10 |    8 |    6 |    8 |    4 |    8 |
-| FEMALE | HISPANIC                   |   18 |   22 |   22 |   16 |   16 |   13 |
-| FEMALE | WHITE NON HISPANIC         |    2 |    4 |    1 |    1 |    1 |    1 |
+| gender |         ethnicity          | 2011 | 2012 | 2013 | 2014 | 2015 | 2016 |
+|:------:|:--------------------------:|:----:|:----:|:----:|:----:|:----:|:----:|
+| FEMALE | ASIAN AND PACIFIC ISLANDER |  4   |  3   |  3   |  1   |  1   |  1   |
+| FEMALE |     BLACK NON HISPANIC     |  10  |  8   |  6   |  8   |  4   |  8   |
+| FEMALE |          HISPANIC          |  18  |  22  |  22  |  16  |  16  |  13  |
+| FEMALE |     WHITE NON HISPANIC     |  2   |  4   |  1   |  1   |  1   |  1   |
 
 the rank in popularity of the name “Olivia” as a female baby name over
 time
@@ -268,15 +240,15 @@ popular_baby_names_df %>%
   select(-count) %>%
   arrange(year_of_birth) %>%
   pivot_wider(names_from = year_of_birth, values_from = childs_first_name) %>%
-  knitr::kable(caption = "the most popular name among male children over time")
+  knitr::kable(caption = "the most popular name among male children over time", align = "c")
 ```
 
-| gender | ethnicity                  | rank | 2011    | 2012   | 2013   | 2014   | 2015   | 2016   |
-|:-------|:---------------------------|-----:|:--------|:-------|:-------|:-------|:-------|:-------|
-| MALE   | ASIAN AND PACIFIC ISLANDER |    1 | ETHAN   | RYAN   | JAYDEN | JAYDEN | JAYDEN | ETHAN  |
-| MALE   | BLACK NON HISPANIC         |    1 | JAYDEN  | JAYDEN | ETHAN  | ETHAN  | NOAH   | NOAH   |
-| MALE   | HISPANIC                   |    1 | JAYDEN  | JAYDEN | JAYDEN | LIAM   | LIAM   | LIAM   |
-| MALE   | WHITE NON HISPANIC         |    1 | MICHAEL | JOSEPH | DAVID  | JOSEPH | DAVID  | JOSEPH |
+| gender |         ethnicity          | rank |  2011   |  2012  |  2013  |  2014  |  2015  |  2016  |
+|:------:|:--------------------------:|:----:|:-------:|:------:|:------:|:------:|:------:|:------:|
+|  MALE  | ASIAN AND PACIFIC ISLANDER |  1   |  ETHAN  |  RYAN  | JAYDEN | JAYDEN | JAYDEN | ETHAN  |
+|  MALE  |     BLACK NON HISPANIC     |  1   | JAYDEN  | JAYDEN | ETHAN  | ETHAN  |  NOAH  |  NOAH  |
+|  MALE  |          HISPANIC          |  1   | JAYDEN  | JAYDEN | JAYDEN |  LIAM  |  LIAM  |  LIAM  |
+|  MALE  |     WHITE NON HISPANIC     |  1   | MICHAEL | JOSEPH | DAVID  | JOSEPH | DAVID  | JOSEPH |
 
 the most popular name among male children over time
 
@@ -302,7 +274,7 @@ ggplot(plt_df, aes(x = rank, y = count)) +
   theme(legend.position = "bottom")
 ```
 
-![](p8105_hw2_CongyangXie_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
+![](p8105_hw2_CongyangXie_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
 
 ``` r
   # geom_text(aes(label=childs_first_name), size=3)
