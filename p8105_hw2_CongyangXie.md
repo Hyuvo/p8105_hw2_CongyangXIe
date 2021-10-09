@@ -70,17 +70,18 @@ precip_df <-
     types are stated here:
 
 ``` r
-MrTrashWheel_df %>% select(-year) %>% skimr::skim() %>% select(skim_variable, numeric.mean) %>% top_n(3) %>% arrange(desc(numeric.mean))
+MrTrashWheel_df %>% select(-year) %>% skimr::skim() %>% select(skim_variable, numeric.mean) %>% top_n(3) %>% arrange(desc(numeric.mean)) %>% knitr::kable(caption = "The top3 trash types")
 ```
 
     ## Selecting by numeric.mean
 
-    ## # A tibble: 3 × 2
-    ##   skim_variable   numeric.mean
-    ##   <chr>                  <dbl>
-    ## 1 cigarette_butts       24522.
-    ## 2 polystyrene            1921.
-    ## 3 plastic_bottles        1899.
+| skim_variable   | numeric.mean |
+|:----------------|-------------:|
+| cigarette_butts |    24521.678 |
+| polystyrene     |     1920.921 |
+| plastic_bottles |     1898.929 |
+
+The top3 trash types
 
 -   The median number of sports balls in a dumpster in 2019 is 9.
 
@@ -92,14 +93,12 @@ MrTrashWheel_df %>% select(-year) %>% skimr::skim() %>% select(skim_variable, nu
     below:
 
 ``` r
-precip_df %>% group_by(year) %>% summarise(mean_month_precip = mean(total))
+precip_df %>% group_by(year) %>% summarise(mean_month_precip = mean(total)) %>% filter(year == 2018) %>% knitr::kable()
 ```
 
-    ## # A tibble: 2 × 2
-    ##    year mean_month_precip
-    ##   <dbl>             <dbl>
-    ## 1  2018              5.86
-    ## 2  2019              2.83
+| year | mean_month_precip |
+|-----:|------------------:|
+| 2018 |          5.860833 |
 
 -   The total precipitation in 2018 is 70.33
 
@@ -223,29 +222,31 @@ popular_baby_names_df %>%
   relocate(year_of_birth, rank) %>%
   group_by(year_of_birth) %>%
   arrange(year_of_birth, rank) %>%
-  select(-childs_first_name)
+  select(-childs_first_name) %>%
+  knitr::kable(caption = "the rank in popularity of the name “Olivia” as a female baby name over time")
 ```
 
-    ## # A tibble: 16 × 5
-    ## # Groups:   year_of_birth [4]
-    ##    year_of_birth  rank gender ethnicity                  count
-    ##            <dbl> <dbl> <chr>  <chr>                      <dbl>
-    ##  1          2013     1 FEMALE WHITE NON HISPANIC           233
-    ##  2          2013     3 FEMALE ASIAN AND PACIFIC ISLANDER   109
-    ##  3          2013     6 FEMALE BLACK NON HISPANIC            64
-    ##  4          2013    22 FEMALE HISPANIC                      87
-    ##  5          2014     1 FEMALE ASIAN AND PACIFIC ISLANDER   141
-    ##  6          2014     1 FEMALE WHITE NON HISPANIC           248
-    ##  7          2014     8 FEMALE BLACK NON HISPANIC            52
-    ##  8          2014    16 FEMALE HISPANIC                      96
-    ##  9          2015     1 FEMALE ASIAN AND PACIFIC ISLANDER   188
-    ## 10          2015     1 FEMALE WHITE NON HISPANIC           225
-    ## 11          2015     4 FEMALE BLACK NON HISPANIC            82
-    ## 12          2015    16 FEMALE HISPANIC                      94
-    ## 13          2016     1 FEMALE ASIAN AND PACIFIC ISLANDER   172
-    ## 14          2016     1 FEMALE WHITE NON HISPANIC           230
-    ## 15          2016     8 FEMALE BLACK NON HISPANIC            49
-    ## 16          2016    13 FEMALE HISPANIC                     108
+| year_of_birth | rank | gender | ethnicity                  | count |
+|--------------:|-----:|:-------|:---------------------------|------:|
+|          2013 |    1 | FEMALE | WHITE NON HISPANIC         |   233 |
+|          2013 |    3 | FEMALE | ASIAN AND PACIFIC ISLANDER |   109 |
+|          2013 |    6 | FEMALE | BLACK NON HISPANIC         |    64 |
+|          2013 |   22 | FEMALE | HISPANIC                   |    87 |
+|          2014 |    1 | FEMALE | ASIAN AND PACIFIC ISLANDER |   141 |
+|          2014 |    1 | FEMALE | WHITE NON HISPANIC         |   248 |
+|          2014 |    8 | FEMALE | BLACK NON HISPANIC         |    52 |
+|          2014 |   16 | FEMALE | HISPANIC                   |    96 |
+|          2015 |    1 | FEMALE | ASIAN AND PACIFIC ISLANDER |   188 |
+|          2015 |    1 | FEMALE | WHITE NON HISPANIC         |   225 |
+|          2015 |    4 | FEMALE | BLACK NON HISPANIC         |    82 |
+|          2015 |   16 | FEMALE | HISPANIC                   |    94 |
+|          2016 |    1 | FEMALE | ASIAN AND PACIFIC ISLANDER |   172 |
+|          2016 |    1 | FEMALE | WHITE NON HISPANIC         |   230 |
+|          2016 |    8 | FEMALE | BLACK NON HISPANIC         |    49 |
+|          2016 |   13 | FEMALE | HISPANIC                   |   108 |
+
+the rank in popularity of the name “Olivia” as a female baby name over
+time
 
 3.  create table showing the most popular name among male children over
     time.
@@ -257,24 +258,38 @@ popular_baby_names_df %>%
   relocate(year_of_birth, rank, childs_first_name) %>%
   group_by(year_of_birth) %>%
   arrange(rank, year_of_birth) %>%
-  filter(rank == 1)
+  filter(rank == 1) %>%
+  knitr::kable(caption = "the most popular name among male children over time")
 ```
 
-    ## # A tibble: 24 × 6
-    ## # Groups:   year_of_birth [6]
-    ##    year_of_birth  rank childs_first_name gender ethnicity                  count
-    ##            <dbl> <dbl> <chr>             <chr>  <chr>                      <dbl>
-    ##  1          2011     1 ETHAN             MALE   ASIAN AND PACIFIC ISLANDER   177
-    ##  2          2011     1 JAYDEN            MALE   BLACK NON HISPANIC           184
-    ##  3          2011     1 JAYDEN            MALE   HISPANIC                     426
-    ##  4          2011     1 MICHAEL           MALE   WHITE NON HISPANIC           292
-    ##  5          2012     1 RYAN              MALE   ASIAN AND PACIFIC ISLANDER   197
-    ##  6          2012     1 JAYDEN            MALE   BLACK NON HISPANIC           171
-    ##  7          2012     1 JAYDEN            MALE   HISPANIC                     364
-    ##  8          2012     1 JOSEPH            MALE   WHITE NON HISPANIC           300
-    ##  9          2013     1 Jayden            MALE   ASIAN AND PACIFIC ISLANDER   220
-    ## 10          2013     1 Ethan             MALE   BLACK NON HISPANIC           146
-    ## # … with 14 more rows
+| year_of_birth | rank | childs_first_name | gender | ethnicity                  | count |
+|--------------:|-----:|:------------------|:-------|:---------------------------|------:|
+|          2011 |    1 | ETHAN             | MALE   | ASIAN AND PACIFIC ISLANDER |   177 |
+|          2011 |    1 | JAYDEN            | MALE   | BLACK NON HISPANIC         |   184 |
+|          2011 |    1 | JAYDEN            | MALE   | HISPANIC                   |   426 |
+|          2011 |    1 | MICHAEL           | MALE   | WHITE NON HISPANIC         |   292 |
+|          2012 |    1 | RYAN              | MALE   | ASIAN AND PACIFIC ISLANDER |   197 |
+|          2012 |    1 | JAYDEN            | MALE   | BLACK NON HISPANIC         |   171 |
+|          2012 |    1 | JAYDEN            | MALE   | HISPANIC                   |   364 |
+|          2012 |    1 | JOSEPH            | MALE   | WHITE NON HISPANIC         |   300 |
+|          2013 |    1 | Jayden            | MALE   | ASIAN AND PACIFIC ISLANDER |   220 |
+|          2013 |    1 | Ethan             | MALE   | BLACK NON HISPANIC         |   146 |
+|          2013 |    1 | Jayden            | MALE   | HISPANIC                   |   352 |
+|          2013 |    1 | David             | MALE   | WHITE NON HISPANIC         |   304 |
+|          2014 |    1 | Jayden            | MALE   | ASIAN AND PACIFIC ISLANDER |   187 |
+|          2014 |    1 | Ethan             | MALE   | BLACK NON HISPANIC         |   138 |
+|          2014 |    1 | Liam              | MALE   | HISPANIC                   |   312 |
+|          2014 |    1 | Joseph            | MALE   | WHITE NON HISPANIC         |   300 |
+|          2015 |    1 | Jayden            | MALE   | ASIAN AND PACIFIC ISLANDER |   190 |
+|          2015 |    1 | Noah              | MALE   | BLACK NON HISPANIC         |   163 |
+|          2015 |    1 | Liam              | MALE   | HISPANIC                   |   356 |
+|          2015 |    1 | David             | MALE   | WHITE NON HISPANIC         |   299 |
+|          2016 |    1 | Ethan             | MALE   | ASIAN AND PACIFIC ISLANDER |   193 |
+|          2016 |    1 | Noah              | MALE   | BLACK NON HISPANIC         |   148 |
+|          2016 |    1 | Liam              | MALE   | HISPANIC                   |   387 |
+|          2016 |    1 | Joseph            | MALE   | WHITE NON HISPANIC         |   261 |
+
+the most popular name among male children over time
 
 4.  For male, white non-hispanic children born in 2016, produce a
     scatter plot showing the number of children with a name (y axis)
@@ -288,7 +303,18 @@ plt_df <- popular_baby_names_df %>%
 # scatter plot
 ggplot(plt_df, aes(x = rank, y = count)) +
   geom_point(alpha = .5)+
-  geom_text(aes(label=childs_first_name), size=3)
+  labs(
+    title = "Children name count - Popularity rank plot",
+    x = "Name popularity rank",
+    y = "Name count",
+    caption = "Data from the NYC Open Data"
+  ) +
+  theme_classic() + 
+  theme(legend.position = "bottom")
 ```
 
 ![](p8105_hw2_CongyangXie_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
+
+``` r
+  # geom_text(aes(label=childs_first_name), size=3)
+```

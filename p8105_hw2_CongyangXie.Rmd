@@ -54,7 +54,7 @@ precip_df <-
 3. The summary of MrTrashWheel dataset:  
   + The MrTrashWheel dataset has `r ncol(MrTrashWheel_df)` variables and `r nrow(MrTrashWheel_df)` observations. The dataset stores trash collect data from each dumpster in the year of `r unique(pull(MrTrashWheel_df, year))`. The trash type includes `r names(MrTrashWheel_df)[7:13]`. The top3 trash types are stated here:
 ```{r}
-MrTrashWheel_df %>% select(-year) %>% skimr::skim() %>% select(skim_variable, numeric.mean) %>% top_n(3) %>% arrange(desc(numeric.mean))
+MrTrashWheel_df %>% select(-year) %>% skimr::skim() %>% select(skim_variable, numeric.mean) %>% top_n(3) %>% arrange(desc(numeric.mean)) %>% knitr::kable(caption = "The top3 trash types")
 
 ```
   + The median number of sports balls in a dumpster in 2019 is `r MrTrashWheel_df %>% filter(year == 2019) %>% pull(sports_balls) %>% median()`.
@@ -64,7 +64,7 @@ MrTrashWheel_df %>% select(-year) %>% skimr::skim() %>% select(skim_variable, nu
   + The precipitation dataset has `r ncol(precip_df)` variables and `r nrow(precip_df)` observations. The dataset stores trash precipitation data on a monthly basis collected from 2018 to 2019. The mean monthly precipitation for 2018 is stated below:
 
 ```{r}
-precip_df %>% group_by(year) %>% summarise(mean_month_precip = mean(total))
+precip_df %>% group_by(year) %>% summarise(mean_month_precip = mean(total)) %>% filter(year == 2018) %>% knitr::kable()
 
 ``` 
 
@@ -170,7 +170,8 @@ popular_baby_names_df %>%
   relocate(year_of_birth, rank) %>%
   group_by(year_of_birth) %>%
   arrange(year_of_birth, rank) %>%
-  select(-childs_first_name)
+  select(-childs_first_name) %>%
+  knitr::kable(caption = "the rank in popularity of the name “Olivia” as a female baby name over time")
   
 ```
 3. create table showing the most popular name among male children over time.
@@ -182,7 +183,8 @@ popular_baby_names_df %>%
   relocate(year_of_birth, rank, childs_first_name) %>%
   group_by(year_of_birth) %>%
   arrange(rank, year_of_birth) %>%
-  filter(rank == 1)
+  filter(rank == 1) %>%
+  knitr::kable(caption = "the most popular name among male children over time")
 
 ```
 
@@ -196,6 +198,15 @@ plt_df <- popular_baby_names_df %>%
 # scatter plot
 ggplot(plt_df, aes(x = rank, y = count)) +
   geom_point(alpha = .5)+
-  geom_text(aes(label=childs_first_name), size=3)
+  labs(
+    title = "Children name count - Popularity rank plot",
+    x = "Name popularity rank",
+    y = "Name count",
+    caption = "Data from the NYC Open Data"
+  ) +
+  theme_classic() + 
+  theme(legend.position = "bottom")
+
+  # geom_text(aes(label=childs_first_name), size=3)
 ```
 
