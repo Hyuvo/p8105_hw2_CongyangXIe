@@ -133,4 +133,12 @@ final_df <-
   left_join(unemployment_df, by = c("year", "month"))
 ```
 
+5. Write a short paragraph about these datasets. Explain briefly what each dataset contained, and describe the resulting dataset (e.g. give the dimension, range of years, and names of key variables).
+
+  + The pols dataset has `r ncol(pols_df)` variables and `r nrow(pols_df)` observations, containing the number of national politicians who are democratic or republican at any given time from `r min(pull(pols_df, year))` to `r max(pull(pols_df, year))`. The variables in the dataset are:  `r names(pols_df)`.
+
+  + The snp dataset has `r ncol(snp_df)` variables and `r nrow(snp_df)` observations, containing Standard & Poor’s stock market index (S&P) at any given time from `r min(pull(snp_df, year))` to `r max(pull(snp_df, year))`.The variables in the dataset are:  `r names(snp_df)`. 
+
+  + The unemployment dataset has `r ncol(unemployment_df)` variables and `r nrow(unemployment_df)` observations, containing unemployment rate at any given time from `r min(pull(unemployment_df, year))` to `r max(pull(unemployment_df, year))`. The variables in the dataset are:  `r names(unemployment_df)`.
+  
 

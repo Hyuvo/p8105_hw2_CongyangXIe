@@ -168,3 +168,23 @@ final_df <-
   left_join(pols_df, snp_df, by = c("year", "month")) %>%
   left_join(unemployment_df, by = c("year", "month"))
 ```
+
+5.  Write a short paragraph about these datasets. Explain briefly what
+    each dataset contained, and describe the resulting dataset
+    (e.g. give the dimension, range of years, and names of key
+    variables).
+
+-   The pols dataset has 9 variables and 1644 observations, containing
+    the number of national politicians who are democratic or republican
+    at any given time from 1947 to 2015. The variables in the dataset
+    are: year, month, gov_gop, sen_gop, rep_gop, gov_dem, sen_dem,
+    rep_dem, president.
+
+-   The snp dataset has 4 variables and 787 observations, containing
+    Standard & Poor’s stock market index (S&P) at any given time from
+    1969 to 2068.The variables in the dataset are: year, month, day,
+    close.
+
+-   The unemployment dataset has 3 variables and 816 observations,
+    containing unemployment rate at any given time from 1948 to 2015.
+    The variables in the dataset are: year, month, unemployment_rate.
