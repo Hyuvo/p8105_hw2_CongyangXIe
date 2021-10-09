@@ -129,7 +129,8 @@ snp_df <-
     day = as.integer(day),
     year = as.integer(year)) %>%
   arrange(year, month) %>%
-  relocate(year, month)
+  relocate(year, month) %>%
+  select(-day)
 ```
 
 3.  tidy the unemployment data so that it can be merged with the
@@ -166,19 +167,20 @@ final_df <-
     year, month, gov_gop, sen_gop, rep_gop, gov_dem, sen_dem, rep_dem,
     president.
 
--   The snp dataset has 4 variables and 787 observations, containing
+-   The snp dataset has 3 variables and 787 observations, containing
     Standard & Poor’s stock market index (S&P) at time ranging from 1969
-    to 2068.The variables in the dataset are: year, month, day, close.
+    to 2068.The variables in the dataset are: year, month, close.
 
 -   The unemployment dataset has 3 variables and 816 observations,
     containing unemployment rate at time ranging from 1948 to 2015. The
     variables in the dataset are: year, month, unemployment_rate.
 
--   The final dataset is merged by the 3 datasets above, which has 3
-    variables and 816 observations, containing the number of national
+-   The final dataset is merged by the 3 datasets above, which has 11
+    variables and 822 observations, containing the number of national
     politicians who are democratic or republican, S&P, and unemployment
-    rate at time ranging from 1948 to 2015.The variables in the dataset
-    are: year, month, unemployment_rate.
+    rate at time ranging from 1947 to 2015.The variables in the dataset
+    are: year, month, gov_gop, sen_gop, rep_gop, gov_dem, sen_dem,
+    rep_dem, president, close, unemployment_rate.
 
 ## Problem 3
 

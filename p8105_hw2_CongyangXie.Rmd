@@ -106,7 +106,8 @@ snp_df <-
     day = as.integer(day),
     year = as.integer(year)) %>%
   arrange(year, month) %>%
-  relocate(year, month)
+  relocate(year, month) %>%
+  select(-day)
 ```
 
 
@@ -136,7 +137,7 @@ final_df <-
 
   + The unemployment dataset has `r ncol(unemployment_df)` variables and `r nrow(unemployment_df)` observations, containing unemployment rate at time ranging from `r min(pull(unemployment_df, year))` to `r max(pull(unemployment_df, year))`. The variables in the dataset are:  `r names(unemployment_df)`.
   
-  + The final dataset is merged by the 3 datasets above, which has `r ncol(unemployment_df)` variables and `r nrow(unemployment_df)` observations, containing the number of national politicians who are democratic or republican, S&P, and unemployment rate at time ranging from `r min(pull(unemployment_df, year))` to `r max(pull(unemployment_df, year))`.The variables in the dataset are:  `r names(unemployment_df)`.
+  + The final dataset is merged by the 3 datasets above, which has `r ncol(final_df)` variables and `r nrow(final_df)` observations, containing the number of national politicians who are democratic or republican, S&P, and unemployment rate at time ranging from `r min(pull(final_df, year))` to `r max(pull(final_df, year))`.The variables in the dataset are:  `r names(final_df)`.
 
 
 ## Problem 3
