@@ -176,15 +176,20 @@ final_df <-
 
 -   The pols dataset has 9 variables and 1644 observations, containing
     the number of national politicians who are democratic or republican
-    at any given time from 1947 to 2015. The variables in the dataset
-    are: year, month, gov_gop, sen_gop, rep_gop, gov_dem, sen_dem,
-    rep_dem, president.
+    at time ranging from 1947 to 2015. The variables in the dataset are:
+    year, month, gov_gop, sen_gop, rep_gop, gov_dem, sen_dem, rep_dem,
+    president.
 
 -   The snp dataset has 4 variables and 787 observations, containing
-    Standard & Poor’s stock market index (S&P) at any given time from
-    1969 to 2068.The variables in the dataset are: year, month, day,
-    close.
+    Standard & Poor’s stock market index (S&P) at time ranging from 1969
+    to 2068.The variables in the dataset are: year, month, day, close.
 
 -   The unemployment dataset has 3 variables and 816 observations,
-    containing unemployment rate at any given time from 1948 to 2015.
-    The variables in the dataset are: year, month, unemployment_rate.
+    containing unemployment rate at time ranging from 1948 to 2015. The
+    variables in the dataset are: year, month, unemployment_rate.
+
+-   The final dataset is merged by the 3 datasets above, which has 3
+    variables and 816 observations, containing the number of national
+    politicians who are democratic or republican, S&P, and unemployment
+    rate at time ranging from 1948 to 2015.The variables in the dataset
+    are: year, month, unemployment_rate.
