@@ -196,6 +196,8 @@ final_df <-
 
 ## Problem 3
 
+1.  Load and tidy dataset popular baby names.
+
 ``` r
 popular_baby_names_df <- read_csv("Popular_Baby_Names.csv") %>%
   janitor::clean_names() %>%
@@ -209,6 +211,9 @@ popular_baby_names_df <- read_csv("Popular_Baby_Names.csv") %>%
   ) %>%
   distinct()
 ```
+
+2.  create tabel showing the rank in popularity of the name “Olivia” as
+    a female baby name over time.
 
 ``` r
 # the rank in popularity of the name “Olivia” as a female baby name over time
@@ -242,6 +247,9 @@ popular_baby_names_df %>%
     ## 15          2016     8 FEMALE BLACK NON HISPANIC            49
     ## 16          2016    13 FEMALE HISPANIC                     108
 
+3.  create table showing the most popular name among male children over
+    time.
+
 ``` r
 # the most popular name among male children over time
 popular_baby_names_df %>%
@@ -267,3 +275,20 @@ popular_baby_names_df %>%
     ##  9          2013     1 Jayden            MALE   ASIAN AND PACIFIC ISLANDER   220
     ## 10          2013     1 Ethan             MALE   BLACK NON HISPANIC           146
     ## # … with 14 more rows
+
+4.  For male, white non-hispanic children born in 2016, produce a
+    scatter plot showing the number of children with a name (y axis)
+    against the rank in popularity of that name (x axis).
+
+``` r
+plt_df <- popular_baby_names_df %>%
+  filter(gender == "MALE" &
+           ethnicity == "WHITE NON HISPANIC" &
+           year_of_birth == 2016) 
+# scatter plot
+ggplot(plt_df, aes(x = rank, y = count)) +
+  geom_point(alpha = .5)+
+  geom_text(aes(label=childs_first_name), size=3)
+```
+
+![](p8105_hw2_CongyangXie_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
