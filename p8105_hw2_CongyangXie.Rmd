@@ -156,7 +156,8 @@ popular_baby_names_df <- read_csv("Popular_Baby_Names.csv") %>%
       "BLACK NON HISP" = "BLACK NON HISPANIC",
       "WHITE NON HISP" = "WHITE NON HISPANIC",
       "ASIAN AND PACI" = "ASIAN AND PACIFIC ISLANDER"
-    )
+    ),
+    childs_first_name = toupper(childs_first_name)
   ) %>%
   distinct()
 ```
@@ -179,11 +180,9 @@ popular_baby_names_df %>%
 ```{r}
 # the most popular name among male children over time
 popular_baby_names_df %>%
-  filter(gender =="MALE") %>%
-  relocate(year_of_birth, rank, childs_first_name) %>%
-  group_by(year_of_birth) %>%
-  arrange(rank, year_of_birth) %>%
-  filter(rank == 1) %>%
+  filter(gender =="MALE" & rank == 1) %>%
+  select(-count) %>%
+  pivot_wider(names_from = year_of_birth, values_from = childs_first_name) %>%
   knitr::kable(caption = "the most popular name among male children over time")
 
 ```
