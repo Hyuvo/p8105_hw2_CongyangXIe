@@ -64,7 +64,7 @@ MrTrashWheel_df %>% select(-year) %>% skimr::skim() %>% select(skim_variable, nu
 
 4. The summary of precipitation data:
 
-  + The precipitation dataset has `r ncol(precip_df)` variables and `r nrow(precip_df)` observations. The dataset stores trash precipitation data on a monthly basis collected from 2018 to 2019. The mean monthly precipitation for 2018 is stated below:
+  + The precipitation dataset has `r ncol(precip_df)` variables and `r nrow(precip_df)` observations. The variables are: `r names(precip_df)`. The dataset stores trash precipitation data on a monthly basis collected from 2018 to 2019. The mean monthly precipitation for 2018 is stated below:
 
 ```{r echo=FALSE, message=FALSE}
 precip_df %>% group_by(year) %>% summarise(mean_month_precip = mean(total)) %>% filter(year == 2018) %>% knitr::kable(caption = "mean monthly precipitation for 2018", align = "c")

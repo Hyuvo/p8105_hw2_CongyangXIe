@@ -85,9 +85,9 @@ The top3 trash types
 4.  The summary of precipitation data:
 
 -   The precipitation dataset has 3 variables and 24 observations. The
-    dataset stores trash precipitation data on a monthly basis collected
-    from 2018 to 2019. The mean monthly precipitation for 2018 is stated
-    below:
+    variables are: year, month, total. The dataset stores trash
+    precipitation data on a monthly basis collected from 2018 to 2019.
+    The mean monthly precipitation for 2018 is stated below:
 
 | year | mean_month_precip |
 |:----:|:-----------------:|
