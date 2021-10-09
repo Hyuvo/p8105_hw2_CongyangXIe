@@ -166,12 +166,10 @@ popular_baby_names_df <- read_csv("Popular_Baby_Names.csv") %>%
 ```{r}
 # the rank in popularity of the name “Olivia” as a female baby name over time
 popular_baby_names_df %>%
-  filter(childs_first_name == "Olivia") %>%
-  filter(gender =="FEMALE") %>%
-  relocate(year_of_birth, rank) %>%
-  group_by(year_of_birth) %>%
-  arrange(year_of_birth, rank) %>%
-  select(-childs_first_name) %>%
+  filter(childs_first_name == "OLIVIA" & gender =="FEMALE") %>%
+  arrange(year_of_birth) %>%
+  select(-childs_first_name, -count) %>%
+  pivot_wider(names_from = year_of_birth, values_from = rank) %>%
   knitr::kable(caption = "the rank in popularity of the name “Olivia” as a female baby name over time")
   
 ```
@@ -182,6 +180,7 @@ popular_baby_names_df %>%
 popular_baby_names_df %>%
   filter(gender =="MALE" & rank == 1) %>%
   select(-count) %>%
+  arrange(year_of_birth) %>%
   pivot_wider(names_from = year_of_birth, values_from = childs_first_name) %>%
   knitr::kable(caption = "the most popular name among male children over time")
 

@@ -218,17 +218,19 @@ popular_baby_names_df <- read_csv("Popular_Baby_Names.csv") %>%
 ``` r
 # the rank in popularity of the name “Olivia” as a female baby name over time
 popular_baby_names_df %>%
-  filter(childs_first_name == "Olivia") %>%
-  filter(gender =="FEMALE") %>%
-  relocate(year_of_birth, rank) %>%
-  group_by(year_of_birth) %>%
-  arrange(year_of_birth, rank) %>%
-  select(-childs_first_name) %>%
+  filter(childs_first_name == "OLIVIA" & gender =="FEMALE") %>%
+  arrange(year_of_birth) %>%
+  select(-childs_first_name, -count) %>%
+  pivot_wider(names_from = year_of_birth, values_from = rank) %>%
   knitr::kable(caption = "the rank in popularity of the name “Olivia” as a female baby name over time")
 ```
 
-| year_of_birth | rank | gender | ethnicity | count |
-|--------------:|-----:|:-------|:----------|------:|
+| gender | ethnicity                  | 2011 | 2012 | 2013 | 2014 | 2015 | 2016 |
+|:-------|:---------------------------|-----:|-----:|-----:|-----:|-----:|-----:|
+| FEMALE | ASIAN AND PACIFIC ISLANDER |    4 |    3 |    3 |    1 |    1 |    1 |
+| FEMALE | BLACK NON HISPANIC         |   10 |    8 |    6 |    8 |    4 |    8 |
+| FEMALE | HISPANIC                   |   18 |   22 |   22 |   16 |   16 |   13 |
+| FEMALE | WHITE NON HISPANIC         |    2 |    4 |    1 |    1 |    1 |    1 |
 
 the rank in popularity of the name “Olivia” as a female baby name over
 time
@@ -241,16 +243,17 @@ time
 popular_baby_names_df %>%
   filter(gender =="MALE" & rank == 1) %>%
   select(-count) %>%
+  arrange(year_of_birth) %>%
   pivot_wider(names_from = year_of_birth, values_from = childs_first_name) %>%
   knitr::kable(caption = "the most popular name among male children over time")
 ```
 
-| gender | ethnicity                  | rank | 2016   | 2015   | 2014   | 2013   | 2012   | 2011    |
-|:-------|:---------------------------|-----:|:-------|:-------|:-------|:-------|:-------|:--------|
-| MALE   | ASIAN AND PACIFIC ISLANDER |    1 | ETHAN  | JAYDEN | JAYDEN | JAYDEN | RYAN   | ETHAN   |
-| MALE   | BLACK NON HISPANIC         |    1 | NOAH   | NOAH   | ETHAN  | ETHAN  | JAYDEN | JAYDEN  |
-| MALE   | HISPANIC                   |    1 | LIAM   | LIAM   | LIAM   | JAYDEN | JAYDEN | JAYDEN  |
-| MALE   | WHITE NON HISPANIC         |    1 | JOSEPH | DAVID  | JOSEPH | DAVID  | JOSEPH | MICHAEL |
+| gender | ethnicity                  | rank | 2011    | 2012   | 2013   | 2014   | 2015   | 2016   |
+|:-------|:---------------------------|-----:|:--------|:-------|:-------|:-------|:-------|:-------|
+| MALE   | ASIAN AND PACIFIC ISLANDER |    1 | ETHAN   | RYAN   | JAYDEN | JAYDEN | JAYDEN | ETHAN  |
+| MALE   | BLACK NON HISPANIC         |    1 | JAYDEN  | JAYDEN | ETHAN  | ETHAN  | NOAH   | NOAH   |
+| MALE   | HISPANIC                   |    1 | JAYDEN  | JAYDEN | JAYDEN | LIAM   | LIAM   | LIAM   |
+| MALE   | WHITE NON HISPANIC         |    1 | MICHAEL | JOSEPH | DAVID  | JOSEPH | DAVID  | JOSEPH |
 
 the most popular name among male children over time
 
